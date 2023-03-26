@@ -5,4 +5,4 @@ para correr el servidor primero cree el archivo .env y configure variables neces
 
 ejecute el siguiente comando para correr el servidor:
 
-### `npm run start`
+### `npm run start-dev`
