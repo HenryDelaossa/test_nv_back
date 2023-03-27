@@ -1,4 +1,5 @@
 import getConnection from "../database/database";
+import { dataToResp } from "../helpers/helpers";
 
 
 /**obtener lista de capacitys de la DB */
@@ -22,10 +23,8 @@ const getCapacity = async (req, res) => {
         if (!id) {
             res.status(400).json({ message: "Información incompleta" });
         }
-
-        const connection = await getConnection();
-        const result = await connection.query(`SELECT * FROM capacitys WHERE ID = ${id}`);
-        res.json({ data: result[0] });
+        const respuesta =await dataToResp(id);
+        res.json(respuesta);
 
     } catch (error) {
         res.status(500);
@@ -45,7 +44,8 @@ const createNewCapacity = async (req, res) => {
         const capacitys = { lts, mlts, cm3, capacidadtotal, disponible };
         const connection = await getConnection();
         const result = await connection.query("INSERT INTO capacitys SET ?", capacitys);
-        res.json(result)
+        const respuesta = await dataToResp(result?.insertId);
+        res.json(respuesta);
 
     } catch (error) {
         res.status(500);
@@ -65,8 +65,9 @@ const editCapacity = async (req, res) => {
 
         const capacitys = { lts, mlts, cm3, capacidadtotal, disponible };
         const connection = await getConnection();
-        const result = await connection.query("UPDATE capacitys SET ? WHERE ID = ?", [capacitys, id]);
-        res.json(result)
+        await connection.query("UPDATE capacitys SET ? WHERE ID = ?", [capacitys, id]);
+        const respuesta = await dataToResp(id);
+        res.json(respuesta);
 
     } catch (error) {
         res.status(500);
